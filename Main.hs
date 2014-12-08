@@ -1,4 +1,4 @@
-module Whip.Main (main) where
+module Main (main) where
 
 import Whip.Parser (parse)
 import Whip.Types (Expr(..))
@@ -12,6 +12,7 @@ lmap f = either (Left . f) Right
 maybeToEither :: a -> Maybe b -> Either a b
 maybeToEither x = maybe (Left x) Right
 
+main :: IO ()
 main = do
     contents <- parse "stdin" <$> getContents
 
