@@ -5,6 +5,7 @@ import qualified Text.ParserCombinators.Parsec as P
 import Text.ParserCombinators.Parsec hiding (parse)
 import Control.Monad (liftM)
 
+parse :: SourceName -> String -> Either ParseError [Expr]
 parse = P.parse pprogram
 
 pprogram :: Parser [Expr]
@@ -36,16 +37,16 @@ pexpr = pstring
 
     pquoted :: Parser Expr
     pquoted = do
-        char '\''
+        _ <- char '\''
         x <- pexpr
         return $ Parens [Symbol "quote", x]
 
     pparens :: Parser Expr
     pparens = do
-        char '('
+        _ <- char '('
         whitespace
         x <- pexpr `sepEndBy` whitespace
-        char ')'
+        _ <- char ')'
         return $ Parens x
 
     psymbol :: Parser Expr

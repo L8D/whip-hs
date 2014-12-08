@@ -8,9 +8,12 @@ type Scope = M.Map String Expr
 
 library :: Scope
 library = M.fromList
-    [ "print" ~> Lambda (\(String s) -> Comput $ print s >> return (Parens []))
+    [ "print" ~> Lambda pr
     , "show" ~> Lambda (String . show)
-    ] where (~>) = (,)
+    ] where
+    (~>) = (,)
+    pr (String s) = Comput $ putStrLn s >> return (Parens [])
+    pr x          = error (show x ++ " is not a string")
 
 runProgram :: [Expr] -> Either String Scope
 runProgram = foldM topEval library
@@ -25,11 +28,11 @@ eval :: Scope -> Expr -> Either String Expr
 eval s e = case e of
     Parens (x:xs) -> eval s x >>= call s xs
     Symbol v      -> case M.lookup v s of
-        Just e    -> Right e
+        Just x    -> Right x
         Nothing   -> Left (show v ++ " is not defined")
     x             -> Right x
 
 call :: Scope -> [Expr] -> Expr -> Either String Expr
-call s []     e          = Right e
+call _ []     e          = Right e
 call s (x:xs) (Lambda f) = eval s x >>= call s xs . f
 call _ _      e          = Left (typeOf e ++ " is not a function")
