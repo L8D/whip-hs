@@ -26,3 +26,12 @@ executable whip
                ,       containers
   default-language:    Haskell2010
 
+test-suite test
+  ghc-options:         -Wall -Werror
+  type:                exitcode-stdio-1.0
+  main-is:             Test.hs
+  hs-source-dirs:      test
+  build-depends:       base
+               ,       whip
+               ,       hspec >= 2.0 && < 2.1
+  default-language:    Haskell2010
