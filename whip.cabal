@@ -50,6 +50,8 @@ cabal-version:       >=1.10
 
 
 executable whip
+  ghc-options: -Wall
+
   -- .hs or .lhs file containing the Main module.
   main-is:             Main.hs
 
