@@ -19,6 +19,14 @@ instance Show Expr where
         Boolen b -> if b then "true" else "false"
         Comput _ -> "⊥"
 
+instance Eq Expr where
+    String s == String t = s == t
+    Number n == Number m = n == m
+    Symbol s == Symbol t = s == t
+    Parens x == Parens y = x == y
+    Boolen b == Boolen c = b == c
+    _        == _        = False
+
 typeOf :: Expr -> String
 typeOf e = case e of
     String _ -> "string"
